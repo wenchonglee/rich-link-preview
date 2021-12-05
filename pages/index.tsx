@@ -1,10 +1,10 @@
-import { Form } from "./components/Form";
+import { Form } from "../components/Form";
 import Head from "next/head";
 import type { NextPage } from "next";
-import { RedditList } from "./components/RedditList";
+import { RedditList } from "../components/RedditList";
 import { UrlMetaData } from "./api/scrape";
-import { fetchMetadata } from "./utils/fetchMetadata";
-import { fetchRedditUrls } from "./utils/fetchRedditUrls";
+import { fetchMetadata } from "../utils/fetchMetadata";
+import { fetchRedditUrls } from "../utils/fetchRedditUrls";
 
 export async function getStaticProps() {
   const redditUrls = await fetchRedditUrls();

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { RichLinkPreview } from "./RichLinkPreview";
-import { UrlMetaData } from "../api/scrape";
+import { UrlMetaData } from "../pages/api/scrape";
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 

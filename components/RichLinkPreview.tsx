@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { LoadingCover } from "./LoadingCover";
 import { LoadingDots } from "./LoadingDots";
-import { UrlMetaData } from "../api/scrape";
+import { UrlMetaData } from "../pages/api/scrape";
 import { css } from "@emotion/react";
 import { fetchMetadata } from "../utils/fetchMetadata";
 import styled from "@emotion/styled";

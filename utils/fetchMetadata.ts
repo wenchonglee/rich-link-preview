@@ -1,4 +1,4 @@
-import { UrlMetaData } from "../api/scrape";
+import { UrlMetaData } from "../pages/api/scrape";
 
 const dev = process.env.NODE_ENV !== "production";
 
