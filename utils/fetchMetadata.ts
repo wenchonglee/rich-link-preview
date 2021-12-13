@@ -10,6 +10,7 @@ export const fetchMetadata = async (url: string): Promise<UrlMetaData | null> =>
 
     return data;
   } catch (error) {
+    console.log(error);
     return null;
   }
 };

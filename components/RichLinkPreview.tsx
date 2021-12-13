@@ -1,30 +1,26 @@
 /* eslint-disable @next/next/no-img-element */
 
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { LoadingCover } from "./LoadingCover";
 import { LoadingDots } from "./LoadingDots";
 import { UrlMetaData } from "../pages/api/scrape";
 import { css } from "@emotion/react";
 import { fetchMetadata } from "../utils/fetchMetadata";
+import { motion } from "framer-motion";
 import styled from "@emotion/styled";
 
 /** @jsxImportSource @emotion/react */
 
-const RichLinkPreviewContainer = styled.div<{ backgroundColor?: string }>(
-  {
-    maxWidth: "420px",
-    minWidth: "420px",
-    minHeight: "200px",
-    borderRadius: "8px",
-    padding: "8px",
-    backgroundColor: "#fafafa",
-    position: "relative",
-  },
-  (props) => ({
-    backgroundColor: props.backgroundColor,
-  })
-);
+const RichLinkPreviewContainer = styled(motion.div)(({ theme }) => ({
+  // maxWidth: "420px",
+  // minWidth: "420px",
+  // minHeight: "200px",
+  borderRadius: theme.borderRadius,
+  padding: theme.space.xs,
+  backgroundColor: "#fafafa",
+  position: "relative",
+}));
 
 const RichLinkPreviewIcon = styled.img({
   width: "20px",
@@ -32,11 +28,11 @@ const RichLinkPreviewIcon = styled.img({
   marginRight: "8px",
 });
 
-const RichLinkPreviewImage = styled.img({
+const RichLinkPreviewImage = styled.img(({ theme }) => ({
   maxWidth: "-webkit-fill-available",
-  borderRadius: "8px",
-  maxHeight: "200px",
-});
+  borderRadius: theme.borderRadius,
+  maxHeight: "120px",
+}));
 
 type RichLinkPreviewProps = {
   url: string;
@@ -66,9 +62,14 @@ const RichLinkPreview = (props: RichLinkPreviewProps) => {
 
   return (
     <RichLinkPreviewContainer
-    // backgroundColor={
-    //   scrapeResponse?.palette.DarkMuted.rgb ? rgbToCss(scrapeResponse?.palette.LightVibrant.rgb) : undefined
-    // }
+      animate={{
+        opacity: 1,
+        // y: 0,
+      }}
+      initial={{
+        opacity: 0,
+        // y: -12
+      }}
     >
       {!scrapeResponse && <LoadingCover isLoading={isLoading || !isImageLoaded} />}
 
@@ -103,27 +104,23 @@ const RichLinkPreview = (props: RichLinkPreviewProps) => {
             {scrapeResponse.description}
           </div>
 
-          <div
-            css={{
-              marginTop: "4px",
-              // display: "flex",
-              // justifyContent: "center",
-            }}
-          >
-            <RichLinkPreviewImage
-              src={scrapeResponse.image}
-              alt="Content image"
-              onLoad={() => setIsImageLoaded(true)}
-            />
-          </div>
+          {scrapeResponse.image && (
+            <div
+              css={{
+                marginTop: "4px",
+              }}
+            >
+              <RichLinkPreviewImage
+                src={scrapeResponse.image}
+                alt="Content image"
+                onLoad={() => setIsImageLoaded(true)}
+              />
+            </div>
+          )}
         </div>
       )}
     </RichLinkPreviewContainer>
   );
 };
-
-// const rgbToCss = (rgb: [number, number, number]) => {
-//   return `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
-// };
 
 export { RichLinkPreview };
