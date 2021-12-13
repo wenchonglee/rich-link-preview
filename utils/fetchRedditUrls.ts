@@ -1,4 +1,4 @@
-const LIMIT = 15;
+const LIMIT = 5;
 const SUBREDDIT = "worldnews";
 
 export const fetchRedditUrls = async (): Promise<string[]> => {
