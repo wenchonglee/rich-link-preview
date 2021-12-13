@@ -72,7 +72,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<UrlMet
       res.status(200).json(urlMetaData);
     })
     .catch((error) => {
-      res.status(500);
+      res.status(500).end();
       console.log(url, error.code);
     });
 }
