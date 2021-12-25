@@ -1,11 +1,16 @@
+import { ScrapeTarget, SearchTarget, isUrl } from "../pages";
+import { fetchMetadata, fetchMetadataFromSearch } from "../api/client/fetchMetadata";
+import { useEffect, useState } from "react";
+
 import { RichLinkPreview } from "./RichLinkPreview";
 import { UrlMetaData } from "../pages/api/scrape";
 import { css } from "@emotion/react";
+import { fetchRedditUrls } from "../api/client/fetchRedditUrls";
 import styled from "@emotion/styled";
 
 /** @jsxImportSource @emotion/react */
 
-export const RichLinkPreviewListContainer = styled.div(({ theme }) => ({
+const RichLinkPreviewListContainer = styled.div(({ theme }) => ({
   display: "grid",
   gap: theme.space.md,
   alignItems: "start",
@@ -26,32 +31,69 @@ export const RichLinkPreviewListContainer = styled.div(({ theme }) => ({
     border: `4px solid ${theme.color.surface1}`,
   },
 }));
-type RichLinkPreviewListProps = { urls: string[] };
+type RichLinkPreviewListProps = { scrapeTargets: ScrapeTarget[] };
 
 const RichLinkPreviewList = (props: RichLinkPreviewListProps) => {
-  const { urls } = props;
+  const { scrapeTargets } = props;
 
   return (
     <RichLinkPreviewListContainer>
-      {urls.map((url, index) => {
-        return <RichLinkPreview scrapeResponse={null} url={url} key={index} />;
+      {scrapeTargets.map((scrapeTarget, index) => {
+        if (isUrl(scrapeTarget)) {
+          return <RichLinkPreview scrapeResponse={null} url={scrapeTarget.url} key={index} />;
+        } else {
+          return <SearchTargetRichLinkList searchTarget={scrapeTarget} key={index} />;
+        }
       })}
     </RichLinkPreviewListContainer>
   );
 };
+type SearchTargetRichLinkListProps = { searchTarget: SearchTarget };
 
-type RedditListProps = { scrapeResponses: (UrlMetaData | null)[] };
+const SearchTargetRichLinkList = (props: SearchTargetRichLinkListProps) => {
+  const { searchTarget } = props;
+  const [scrapeResponses, setScrapeResponses] = useState<UrlMetaData[]>([]);
 
-const RedditList = (props: RedditListProps) => {
-  const { scrapeResponses } = props;
+  useEffect(() => {
+    const fetch = async () => {
+      const response = await fetchMetadataFromSearch(searchTarget);
+
+      if (response) {
+        setScrapeResponses(response);
+      }
+    };
+
+    fetch();
+  }, [searchTarget]);
+
+  return (
+    <>
+      {scrapeResponses.map((scrapeResponse, index) => {
+        return <RichLinkPreview scrapeResponse={scrapeResponse} url={scrapeResponse.url} key={index} />;
+      })}
+    </>
+  );
+};
+
+const RedditList = () => {
+  const [scrapeResponses, setScrapeResponses] = useState<UrlMetaData[]>([]);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const redditUrls = await fetchRedditUrls();
+      const response = await fetchMetadata(redditUrls);
+
+      if (response) {
+        setScrapeResponses(response);
+      }
+    };
+
+    fetch();
+  }, []);
 
   return (
     <RichLinkPreviewListContainer>
       {scrapeResponses.map((scrapeResponse, index) => {
-        if (!scrapeResponse) {
-          return null;
-        }
-
         return <RichLinkPreview scrapeResponse={scrapeResponse} url={scrapeResponse.url} key={index} />;
       })}
     </RichLinkPreviewListContainer>
