@@ -20,7 +20,7 @@ const Home: NextPage = () => {
     <>
       <Head>
         <title>Rich Link Preview</title>
-        <meta name="og:description" content="Render rich link previews for your websites" />
+        <meta property="og:description" content="Render rich link previews for your websites" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

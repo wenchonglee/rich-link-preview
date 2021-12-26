@@ -16,8 +16,6 @@ export type UrlMetaData = {
 };
 
 export const scrape = async (url: string): Promise<UrlMetaData> => {
-  const urlInterface = new URL(url);
-
   const cache = responseCache.get(url);
   if (cache) {
     return cache;
@@ -33,6 +31,7 @@ export const scrape = async (url: string): Promise<UrlMetaData> => {
     })
     .then((response) => {
       const { data } = response;
+
       const cheerioAPI = cheerio.load(data);
       const title = getTitle(cheerioAPI);
       const description = getDescription(cheerioAPI);
@@ -40,13 +39,7 @@ export const scrape = async (url: string): Promise<UrlMetaData> => {
       const image = getImage(cheerioAPI);
       const keywords = getKeywords(cheerioAPI);
 
-      let icon = getIcon(cheerioAPI);
-      // check if icon url is valid
-      try {
-        if (icon) new URL(icon);
-      } catch (e) {
-        icon = `${urlInterface.protocol}//${urlInterface.hostname}${icon}`;
-      }
+      let icon = getIcon(url, cheerioAPI);
 
       const urlMetaData: UrlMetaData = {
         title,
@@ -68,20 +61,42 @@ export const scrape = async (url: string): Promise<UrlMetaData> => {
 
   return urlMetadata;
 };
-
+/**
+ *
+ * Todo: Separate between RDFa and old HTML tags, comment them properly
+ * https://en.wikipedia.org/wiki/RDFa
+ * https://stackoverflow.com/questions/22350105/whats-the-difference-between-meta-name-and-meta-property
+ * https://indieweb.org/The-Open-Graph-protocol
+ *
+ * https://medium.com/slack-developer-blog/everything-you-ever-wanted-to-know-about-unfurling-but-were-afraid-to-ask-or-how-to-make-your-e64b4bb9254
+ * https://api.slack.com/reference/messaging/link-unfurling
+ *
+ * To add:
+ * - Twitter cards
+ * - Check page content for description
+ * - Check page content for first image
+ *
+ */
 const getTitle = (cheerioAPI: CheerioAPI) => {
-  return (
-    cheerioAPI('meta[property="og:title"]').attr("content") ||
-    cheerioAPI("title").text() ||
-    cheerioAPI('meta[name="title"]').attr("content")
-  );
+  const ogTitle = cheerioAPI('meta[property="og:title"]').attr("content");
+  if (ogTitle) return ogTitle;
+
+  const documentTitle = cheerioAPI("title").text();
+  if (documentTitle) return documentTitle;
+
+  const htmlMeta = cheerioAPI('meta[name="title"]').attr("content");
+  return htmlMeta;
 };
 
 const getDescription = (cheerioAPI: CheerioAPI) => {
-  return (
-    cheerioAPI('meta[property="og:description"]').attr("content") ||
-    cheerioAPI('meta[name="description"]').attr("content")
-  );
+  const ogDescription = cheerioAPI('meta[property="og:description"]').attr("content");
+  if (ogDescription) return ogDescription;
+
+  const htmlMeta1 = cheerioAPI('meta[name="og:description"]').attr("content");
+  if (htmlMeta1) return htmlMeta1;
+
+  const htmlMeta2 = cheerioAPI('meta[name="description"]').attr("content");
+  return htmlMeta2;
 };
 
 const getSiteName = (cheerioAPI: CheerioAPI) => {
@@ -95,8 +110,17 @@ const getImage = (cheerioAPI: CheerioAPI) => {
   );
 };
 
-const getIcon = (cheerioAPI: CheerioAPI) => {
-  return cheerioAPI('link[rel="icon"]').attr("href") || cheerioAPI('link[rel="shortcut icon"]').attr("href");
+const getIcon = (url: string, cheerioAPI: CheerioAPI) => {
+  const urlInterface = new URL(url);
+  let icon = cheerioAPI('link[rel="icon"]').attr("href") || cheerioAPI('link[rel="shortcut icon"]').attr("href");
+  // check if icon url is valid
+  try {
+    if (icon) new URL(icon);
+  } catch (e) {
+    icon = `${urlInterface.protocol}//${urlInterface.hostname}${icon}`;
+  }
+
+  return icon;
 };
 
 const getKeywords = (cheerioAPI: CheerioAPI) => {

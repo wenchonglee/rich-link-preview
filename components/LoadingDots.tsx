@@ -1,4 +1,4 @@
-import { Variants, motion, useAnimation } from "framer-motion";
+import { Variants, motion } from "framer-motion";
 
 /** @jsxImportSource @emotion/react */
 
@@ -26,8 +26,6 @@ const childVariant: Variants = {
 };
 
 export const LoadingDots = () => {
-  const controls = useAnimation();
-
   return (
     <motion.div
       css={{

@@ -4,6 +4,7 @@ import { ThemeName, useUserTheme } from "../ThemeContext";
 import { HeroGrid } from "./HeroGrid";
 import Image from "next/image";
 import { Input } from "./Input";
+import { Label } from "./Label";
 import { ScrapeTarget } from "../../pages";
 import { Subtext } from "./Subtext";
 import { fetchMetadataFromSearch } from "api/client/fetchMetadata";
@@ -65,44 +66,91 @@ export const Hero = (props: HeroProps) => {
   return (
     <HeroGrid>
       <span>
-        <a href="https://github.com/wenchonglee/rich-link-preview" target="_blank" rel="noreferrer">
+        <a
+          href="https://github.com/wenchonglee/rich-link-preview"
+          target="_blank"
+          rel="noreferrer"
+          css={{
+            "&:-webkit-any-link": {
+              textDecoration: "none",
+            },
+          }}
+        >
           <Image
             src={userTheme === ThemeName.Dark ? "/github-light.png" : "/github-dark.png"}
             alt="Github-icon"
             height={16}
             width={16}
-          />
+          />{" "}
+          <span>@wenchonglee</span>
         </a>
       </span>
       <h1>Rich link preview </h1>
       <Subtext>
         Messaging apps today show a preview of the pasted link <br />
-        Is your website handling meta tags well? Enter your url to check it out
+        Enter a url or try a google search on your site
       </Subtext>
 
       <br />
 
       {formView === "single_site" ? (
         <form onSubmit={handleSubmitSingleSite}>
-          <Input autoFocus ref={urlInputRef} type="url" placeholder="Enter Url" />
-          <a onClick={() => setFormView("google_search")}>or search your site</a>
+          <div
+            css={(theme) => ({
+              display: "grid",
+              gap: theme.space.md,
+            })}
+          >
+            <div>
+              <Label htmlFor="url">Enter a Url</Label>
+              <Input
+                id="url"
+                autoFocus
+                ref={urlInputRef}
+                type="url"
+                placeholder="e.g. https://github.com/wenchonglee/rich-link-preview"
+              />
+            </div>
+
+            <Subtext as="a" onClick={() => setFormView("google_search")} css={{ display: "block", cursor: "pointer" }}>
+              Search your site instead
+            </Subtext>
+          </div>
         </form>
       ) : (
         <form onSubmit={handleSubmitGoogleSearch}>
-          <Input autoFocus ref={siteInputRef} type="url" placeholder="e.g. youtube.com" />
-          <Input ref={queryInputRef} type="text" placeholder="e.g. test" />
-          <button onClick={handleSubmitGoogleSearch}>go search</button>
-          <a onClick={() => setFormView("single_site")}>back</a>
+          <div
+            css={(theme) => ({
+              display: "grid",
+              gap: theme.space.md,
+            })}
+          >
+            <div>
+              <Label htmlFor="query">Enter a search query</Label>
+              <Input id="query" ref={queryInputRef} type="text" placeholder="e.g. test" />
+            </div>
+
+            <div>
+              <Label htmlFor="site">Enter a url</Label>
+              <Input id="site" autoFocus ref={siteInputRef} type="url" placeholder="e.g. https://youtube.com" />
+            </div>
+
+            <Subtext as="a" onClick={() => setFormView("single_site")} css={{ display: "block", cursor: "pointer" }}>
+              Enter a single url instead
+            </Subtext>
+          </div>
+
+          {/* <button onClick={handleSubmitGoogleSearch}>go search</button> */}
         </form>
       )}
       <br />
-
+      {/* 
       <Subtext>
         Read more about Open Graph Protocol{" "}
         <a href="https://ogp.me/" target="_blank" rel="noreferrer">
           here
         </a>
-      </Subtext>
+      </Subtext> */}
     </HeroGrid>
   );
 };

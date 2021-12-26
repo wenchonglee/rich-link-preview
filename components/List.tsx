@@ -2,7 +2,9 @@ import { ScrapeTarget, SearchTarget, isUrl } from "../pages";
 import { fetchMetadata, fetchMetadataFromSearch } from "api/client/fetchMetadata";
 import { useEffect, useState } from "react";
 
+import { LoadingDots } from "./LoadingDots";
 import { RichLinkPreview } from "./RichLinkPreview";
+import { Subtext } from "./Hero/Subtext";
 import { UrlMetaData } from "../pages/api/scrape";
 import { css } from "@emotion/react";
 import { fetchRedditUrls } from "api/client/fetchRedditUrls";
@@ -14,6 +16,7 @@ const RichLinkPreviewListContainer = styled.div(({ theme }) => ({
   display: "grid",
   gap: theme.space.md,
   alignItems: "start",
+  alignContent: "flex-start",
   flexDirection: "column",
   maxHeight: "88vh",
   overflow: "scroll",
@@ -38,6 +41,10 @@ const RichLinkPreviewList = (props: RichLinkPreviewListProps) => {
 
   return (
     <RichLinkPreviewListContainer>
+      <div>
+        <h3>Your queries </h3>
+      </div>
+
       {scrapeTargets.map((scrapeTarget, index) => {
         if (isUrl(scrapeTarget)) {
           return <RichLinkPreview scrapeResponse={null} url={scrapeTarget.url} key={index} />;
@@ -77,15 +84,18 @@ const SearchTargetRichLinkList = (props: SearchTargetRichLinkListProps) => {
 
 const RedditList = () => {
   const [scrapeResponses, setScrapeResponses] = useState<UrlMetaData[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetch = async () => {
+      setIsLoading(true);
       const redditUrls = await fetchRedditUrls();
       const response = await fetchMetadata(redditUrls);
 
       if (response) {
         setScrapeResponses(response);
       }
+      setIsLoading(false);
     };
 
     fetch();
@@ -93,6 +103,18 @@ const RedditList = () => {
 
   return (
     <RichLinkPreviewListContainer>
+      <div>
+        <h3>Examples from Reddit </h3>
+        <Subtext>r/worldnews</Subtext>
+
+        {isLoading && (
+          <>
+            <br />
+            <LoadingDots />
+          </>
+        )}
+      </div>
+
       {scrapeResponses.map((scrapeResponse, index) => {
         return <RichLinkPreview scrapeResponse={scrapeResponse} url={scrapeResponse.url} key={index} />;
       })}

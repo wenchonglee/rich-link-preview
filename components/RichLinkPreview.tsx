@@ -2,10 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { LoadingCover } from "./LoadingCover";
-import { LoadingDots } from "./LoadingDots";
 import { UrlMetaData } from "pages/api/scrape";
-import { css } from "@emotion/react";
 import { fetchMetadata } from "api/client/fetchMetadata";
 import { motion } from "framer-motion";
 import styled from "@emotion/styled";
@@ -13,9 +10,8 @@ import styled from "@emotion/styled";
 /** @jsxImportSource @emotion/react */
 
 const RichLinkPreviewContainer = styled(motion.div)(({ theme }) => ({
-  // maxWidth: "420px",
-  // minWidth: "420px",
-  // minHeight: "200px",
+  maxWidth: "50ch",
+  minWidth: "50ch",
   borderRadius: theme.borderRadius,
   padding: theme.space.xs,
   backgroundColor: "#fafafa",
@@ -71,7 +67,7 @@ const RichLinkPreview = (props: RichLinkPreviewProps) => {
         // y: -12
       }}
     >
-      {!scrapeResponse && <LoadingCover isLoading={isLoading || !isImageLoaded} />}
+      {/* {!scrapeResponse && <LoadingCover isLoading={isLoading || !isImageLoaded} />} */}
 
       {scrapeResponse && (
         <div>

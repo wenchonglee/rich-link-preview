@@ -21,6 +21,12 @@ const baseTheme = {
     lg: "1.25rem",
     xl: "1.5rem",
   },
+  fontWeight: {
+    s: 300,
+    md: 400,
+    lg: 500,
+    xl: 700,
+  },
   borderRadius: "8px",
 };
 

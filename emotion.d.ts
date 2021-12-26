@@ -18,6 +18,12 @@ declare module "@emotion/react" {
       lg: string;
       xl: string;
     };
+    fontWeight: {
+      s: number;
+      md: number;
+      lg: number;
+      xl: number;
+    };
     borderRadius: string;
 
     color: {
