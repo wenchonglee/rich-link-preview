@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 
 import { LoadingCover } from "./LoadingCover";
 import { LoadingDots } from "./LoadingDots";
-import { UrlMetaData } from "../pages/api/scrape";
+import { UrlMetaData } from "pages/api/scrape";
 import { css } from "@emotion/react";
-import { fetchMetadata } from "../api/client/fetchMetadata";
+import { fetchMetadata } from "api/client/fetchMetadata";
 import { motion } from "framer-motion";
 import styled from "@emotion/styled";
 

@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import { googleSearch } from "../../api/server/googleSearch";
-import { scrape } from "../../api/server/scrape";
+import { googleSearch } from "api/server/googleSearch";
+import { scrape } from "api/server/scrape";
 
 export type UrlMetaData = {
   url: string;
@@ -31,6 +31,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     .filter((promise) => promise.status === "fulfilled")
     .map((promise) => (promise as PromiseFulfilledResult<UrlMetaData>).value);
 
-  // res.status(500).end();
   res.status(200).json(response);
 }

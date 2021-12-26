@@ -1,21 +1,14 @@
 import { Global } from "@emotion/react";
+import { ThemeName } from "components/ThemeContext";
 
 /** @jsxImportSource @emotion/react */
 
-/** 
-create a theme system in pure css
-- media queries (color scheme, no animation, ...)
-- try to use logical css rules
-
-also:
-- use label and form input and tie them tgt
-*/
-export const GlobalStyles = ({ isPreferDarkScheme }: { isPreferDarkScheme: boolean }) => {
+export const GlobalStyles = ({ userTheme }: { userTheme: ThemeName | null }) => {
   return (
     <Global
       styles={(theme) => ({
         ":root": {
-          colorScheme: isPreferDarkScheme ? "dark" : "light",
+          colorScheme: userTheme === ThemeName.Dark ? "dark" : "light",
         },
         "*": {
           boxSizing: "border-box",

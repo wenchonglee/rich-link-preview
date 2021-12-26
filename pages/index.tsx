@@ -1,8 +1,8 @@
-import { RedditList, RichLinkPreviewList } from "../components/List";
+import { RedditList, RichLinkPreviewList } from "components/List";
 
 import Head from "next/head";
-import { Hero } from "../components/Hero/Hero";
-import { Main } from "../components/Main";
+import { Hero } from "components/Hero/Hero";
+import { Main } from "components/Main";
 import type { NextPage } from "next";
 import { useState } from "react";
 

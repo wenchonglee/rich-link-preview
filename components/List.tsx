@@ -1,11 +1,11 @@
 import { ScrapeTarget, SearchTarget, isUrl } from "../pages";
-import { fetchMetadata, fetchMetadataFromSearch } from "../api/client/fetchMetadata";
+import { fetchMetadata, fetchMetadataFromSearch } from "api/client/fetchMetadata";
 import { useEffect, useState } from "react";
 
 import { RichLinkPreview } from "./RichLinkPreview";
 import { UrlMetaData } from "../pages/api/scrape";
 import { css } from "@emotion/react";
-import { fetchRedditUrls } from "../api/client/fetchRedditUrls";
+import { fetchRedditUrls } from "api/client/fetchRedditUrls";
 import styled from "@emotion/styled";
 
 /** @jsxImportSource @emotion/react */
