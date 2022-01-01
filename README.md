@@ -21,5 +21,6 @@ This web app is first and foremost an exploratory project for me to try:
 
   - This project was an excuse to run through this [Google IO Workshop](https://github.com/argyleink/Google-IO-2021-Workshop_User-Adaptive-Interfaces)
 
-<!-- # Limitations -->
-<!-- Cannot hit websites that isn't server rendered (e.g. twitter) -->
+## Unresolved Limitations
+
+- Cannot hit websites that isn't server rendered (e.g. twitter)

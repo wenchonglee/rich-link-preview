@@ -1,9 +1,10 @@
-import { RedditList, RichLinkPreviewList } from "components/List";
-
 import Head from "next/head";
 import { Hero } from "components/Hero/Hero";
 import { Main } from "components/Main";
 import type { NextPage } from "next";
+import { RedditList } from "components/RichLinkPreviewList/RedditList";
+import { RichLinkPreviewList } from "components/RichLinkPreviewList/RichLinkPreviewList";
+import useMedia from "use-media";
 import { useState } from "react";
 
 type UrlTarget = { url: string };
@@ -15,6 +16,7 @@ export const isUrl = (scrapeTarget: ScrapeTarget): scrapeTarget is UrlTarget => 
 
 const Home: NextPage = () => {
   const [scrapeTargets, setScrapeTargets] = useState<ScrapeTarget[]>([]);
+  const isPortraitMedia = useMedia("(orientation: portrait) and (min-width: 40ch)");
 
   return (
     <>
@@ -26,8 +28,14 @@ const Home: NextPage = () => {
 
       <Main>
         <Hero setScrapeTargets={setScrapeTargets} />
-        <RichLinkPreviewList scrapeTargets={scrapeTargets} />
-        <RedditList />
+        {isPortraitMedia ? (
+          <RichLinkPreviewList scrapeTargets={scrapeTargets} />
+        ) : (
+          <>
+            <RichLinkPreviewList scrapeTargets={scrapeTargets} />
+            <RedditList />
+          </>
+        )}
       </Main>
     </>
   );

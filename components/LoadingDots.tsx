@@ -15,8 +15,6 @@ const childVariant: Variants = {
   initial: { opacity: 1 },
   animate: {
     y: 12,
-    // height: "24px",
-    // borderRadius: "8px",
     transition: {
       duration: 0.45,
       repeat: Infinity,
