@@ -40,16 +40,11 @@ const RichLinkPreviewIcon = styled.img({
   marginRight: "8px",
 });
 
-const RichLinkPreviewImage = styled(motion.img)<{ isLoading: boolean }>(
-  ({ theme }) => ({
-    maxWidth: "-webkit-fill-available",
-    borderRadius: theme.borderRadius,
-    maxHeight: "120px",
-  }),
-  ({ isLoading }) => ({
-    animation: isLoading ? `${pulse} 1.4s cubic-bezier(0.4, 0, 0.6, 1) infinite` : undefined,
-  })
-);
+const RichLinkPreviewImage = styled(motion.img)(({ theme }) => ({
+  maxWidth: "-webkit-fill-available",
+  borderRadius: theme.borderRadius,
+  maxHeight: "120px",
+}));
 
 type RichLinkPreviewProps = {
   url: string;
@@ -62,6 +57,7 @@ const RichLinkPreview = (props: RichLinkPreviewProps) => {
   const [scrapeResponse, setScrapeResponse] = useState<UrlMetaData | null>(props.scrapeResponse);
   const [isLoading, setIsLoading] = useState(false);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const isReadyForRender = !isLoading && isImageLoaded;
 
   useEffect(() => {
     const scrape = async () => {
@@ -70,6 +66,9 @@ const RichLinkPreview = (props: RichLinkPreviewProps) => {
         const data = await fetchMetadata(url);
 
         setScrapeResponse(data !== null ? data[0] : null);
+        if (data !== null && !data[0].image) {
+          setIsImageLoaded(true);
+        }
         setIsLoading(false);
       }
     };
@@ -81,7 +80,7 @@ const RichLinkPreview = (props: RichLinkPreviewProps) => {
     <RichLinkPreviewContainer
       animate={{
         opacity: 1,
-        height: isLoading && !isImageLoaded ? "120px" : "auto",
+        height: isReadyForRender ? "auto" : "120px",
       }}
       initial={{
         opacity: 0,
@@ -90,7 +89,7 @@ const RichLinkPreview = (props: RichLinkPreviewProps) => {
         height: { delay: 0, duration: 0.4 },
         opacity: { delay: 0.5, duration: 0.5 },
       }}
-      isLoading={isLoading && !isImageLoaded}
+      isLoading={!isReadyForRender}
     >
       {scrapeResponse && (
         <div>
@@ -124,21 +123,10 @@ const RichLinkPreview = (props: RichLinkPreviewProps) => {
               })}
             >
               <RichLinkPreviewImage
-                isLoading={isLoading}
-                animate={{
-                  opacity: isLoading && !isImageLoaded ? 0 : 1,
-                  // maxHeight: isLoading && !isImageLoaded ? "120px" : "auto",
-                }}
-                initial={{
-                  opacity: 0,
-                }}
-                transition={{
-                  maxHeight: { delay: 0, duration: 0.4 },
-                  opacity: { delay: 0.5, duration: 0.5 },
-                }}
                 src={scrapeResponse.image}
                 alt="Content image"
                 onLoad={() => setIsImageLoaded(true)}
+                onError={() => console.log("err")}
               />
             </div>
           )}

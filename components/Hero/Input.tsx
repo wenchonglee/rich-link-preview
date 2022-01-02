@@ -5,8 +5,6 @@ export const Input = styled.input(
     border: "none",
     width: "50ch",
     borderRadius: "6px",
-    // transition:
-    //   "box-shadow 200ms ease-out,background-image 200ms ease-out,background-size 200ms ease-out,background-color 200ms ease-out",
     backgroundSize: "0% 100%",
     backgroundRepeat: "no-repeat",
     "&:focus": {

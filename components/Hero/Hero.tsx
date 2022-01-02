@@ -8,7 +8,6 @@ import { Input } from "./Input";
 import { Label } from "./Label";
 import { ScrapeTarget } from "../../pages";
 import { Subtext } from "./Subtext";
-import { fetchMetadataFromSearch } from "api/client/fetchMetadata";
 
 /** @jsxImportSource @emotion/react */
 
@@ -31,11 +30,7 @@ export const Hero = (props: HeroProps) => {
         const urlTarget = {
           url: urlInputRef.current.value,
         };
-        setScrapeTargets((prev) => {
-          console.log(prev);
-          console.log([urlTarget, ...prev]);
-          return [urlTarget, ...prev];
-        });
+        setScrapeTargets((prev) => [urlTarget, ...prev]);
         urlInputRef.current.value = "";
       } catch (error) {
         console.error("Invalid url");
@@ -100,6 +95,7 @@ export const Hero = (props: HeroProps) => {
             <div>
               <Label htmlFor="url">Enter a Url</Label>
               <Input
+                autoComplete="off"
                 id="url"
                 autoFocus
                 ref={urlInputRef}
@@ -137,12 +133,19 @@ export const Hero = (props: HeroProps) => {
           >
             <div>
               <Label htmlFor="query">Enter a search query</Label>
-              <Input id="query" ref={queryInputRef} type="text" placeholder="e.g. test" />
+              <Input id="query" ref={queryInputRef} type="text" placeholder="e.g. test" autoComplete="off" />
             </div>
 
             <div>
               <Label htmlFor="site">Enter a url</Label>
-              <Input id="site" autoFocus ref={siteInputRef} type="url" placeholder="e.g. https://youtube.com" />
+              <Input
+                id="site"
+                autoFocus
+                ref={siteInputRef}
+                type="url"
+                placeholder="e.g. https://youtube.com"
+                autoComplete="off"
+              />
             </div>
 
             <div
