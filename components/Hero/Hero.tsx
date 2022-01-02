@@ -1,6 +1,7 @@
 import { Dispatch, FormEventHandler, SetStateAction, useRef, useState } from "react";
 import { ThemeName, useUserTheme } from "../ThemeContext";
 
+import { Button } from "./Button";
 import { HeroGrid } from "./HeroGrid";
 import Image from "next/image";
 import { Input } from "./Input";
@@ -30,8 +31,11 @@ export const Hero = (props: HeroProps) => {
         const urlTarget = {
           url: urlInputRef.current.value,
         };
-
-        setScrapeTargets((prev) => [...prev, urlTarget]);
+        setScrapeTargets((prev) => {
+          console.log(prev);
+          console.log([urlTarget, ...prev]);
+          return [urlTarget, ...prev];
+        });
         urlInputRef.current.value = "";
       } catch (error) {
         console.error("Invalid url");
@@ -41,7 +45,6 @@ export const Hero = (props: HeroProps) => {
 
   const handleSubmitGoogleSearch: FormEventHandler = async (e) => {
     e.preventDefault();
-
     if (siteInputRef.current && queryInputRef.current) {
       const searchTarget = {
         site: siteInputRef.current.value,
@@ -49,14 +52,7 @@ export const Hero = (props: HeroProps) => {
       };
 
       try {
-        // new URL(siteInputRef.current.value);
-        // const asd = await fetchMetadataFromSearch({
-        //   site: siteInputRef.current.value,
-        //   query: queryInputRef.current?.value,
-        // });
-
-        // const newUrls = asd?.map((newUrl) => newUrl.url);
-        setScrapeTargets((prev) => [...prev, searchTarget]);
+        setScrapeTargets((prev) => [searchTarget, ...prev]);
       } catch (error) {
         console.error("Invalid url");
       }
@@ -112,9 +108,23 @@ export const Hero = (props: HeroProps) => {
               />
             </div>
 
-            <Subtext as="a" onClick={() => setFormView("google_search")} css={{ display: "block", cursor: "pointer" }}>
-              Search your site instead
-            </Subtext>
+            <div
+              css={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-end",
+              }}
+            >
+              <Subtext
+                as="a"
+                onClick={() => setFormView("google_search")}
+                css={{ display: "block", cursor: "pointer" }}
+              >
+                Search your site instead
+              </Subtext>
+
+              <Button type="submit">Submit</Button>
+            </div>
           </div>
         </form>
       ) : (
@@ -135,22 +145,23 @@ export const Hero = (props: HeroProps) => {
               <Input id="site" autoFocus ref={siteInputRef} type="url" placeholder="e.g. https://youtube.com" />
             </div>
 
-            <Subtext as="a" onClick={() => setFormView("single_site")} css={{ display: "block", cursor: "pointer" }}>
-              Enter a single url instead
-            </Subtext>
-          </div>
+            <div
+              css={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-end",
+              }}
+            >
+              <Subtext as="a" onClick={() => setFormView("single_site")} css={{ display: "block", cursor: "pointer" }}>
+                Enter a single url instead
+              </Subtext>
 
-          {/* <button onClick={handleSubmitGoogleSearch}>go search</button> */}
+              <Button type="submit">Submit</Button>
+            </div>
+          </div>
         </form>
       )}
       <br />
-      {/* 
-      <Subtext>
-        Read more about Open Graph Protocol{" "}
-        <a href="https://ogp.me/" target="_blank" rel="noreferrer">
-          here
-        </a>
-      </Subtext> */}
     </HeroGrid>
   );
 };

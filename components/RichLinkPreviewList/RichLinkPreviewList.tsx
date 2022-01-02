@@ -15,15 +15,15 @@ export const RichLinkPreviewList = (props: RichLinkPreviewListProps) => {
       <div>
         <h3>Your queries </h3>
       </div>
-      <RichLinkPreview scrapeResponse={null} url={"https://github.com/wenchonglee/rich-link-preview"} />
 
       {scrapeTargets.map((scrapeTarget, index) => {
         if (isUrl(scrapeTarget)) {
-          return <RichLinkPreview scrapeResponse={null} url={scrapeTarget.url} key={index} />;
+          return <RichLinkPreview scrapeResponse={null} url={scrapeTarget.url} key={scrapeTarget.url} />;
         } else {
           return <SearchTargetRichLinkList searchTarget={scrapeTarget} key={index} />;
         }
       })}
+      <RichLinkPreview scrapeResponse={null} url={"https://github.com/wenchonglee/rich-link-preview"} />
     </RichLinkPreviewListContainer>
   );
 };

@@ -22,7 +22,7 @@ export const GlobalStyles = ({ userTheme }: { userTheme: ThemeName | null }) => 
           padding: theme.space.md,
           fontFamily: "system-ui, Segoe UI, Roboto, sans-serif",
           background: theme.color.surface1,
-          "@media (orientation: landscape) and (min-width: 640px)": {
+          "@media (orientation: landscape) and (min-width: 40ch)": {
             padding: theme.space.xl,
           },
         },

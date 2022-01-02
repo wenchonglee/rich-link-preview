@@ -34,6 +34,12 @@ export const UserThemeProvider: React.FC = ({ children }) => {
     setUserTheme(localStorageTheme ?? ThemeName.Light);
   }, []);
 
+  useEffect(() => {
+    if (userTheme) {
+      window.localStorage.setItem("theme", userTheme);
+    }
+  }, [userTheme]);
+
   return (
     <UserThemeContext.Provider
       value={{

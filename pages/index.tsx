@@ -4,6 +4,7 @@ import { Main } from "components/Main";
 import type { NextPage } from "next";
 import { RedditList } from "components/RichLinkPreviewList/RedditList";
 import { RichLinkPreviewList } from "components/RichLinkPreviewList/RichLinkPreviewList";
+import { ThemeToggle } from "components/ThemeToggle";
 import useMedia from "use-media";
 import { useState } from "react";
 
@@ -37,6 +38,7 @@ const Home: NextPage = () => {
           </>
         )}
       </Main>
+      <ThemeToggle />
     </>
   );
 };

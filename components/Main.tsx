@@ -6,7 +6,6 @@ export const Main = styled.main(({ theme }) => ({
   gap: theme.space.md,
   height: "88vh",
   "@media (orientation: portrait) and (min-width: 40ch)": {
-    gridTemplateColumns: "60ch",
     placeContent: "flex-start",
   },
   "@media (orientation: landscape) and (min-width: 80ch)": {
